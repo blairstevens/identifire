@@ -40,3 +40,16 @@ images_ds = list_ds.map(parse_image)
 
 for image, label in images_ds.take(2):
   show(image, label)
+
+batch_size = 32
+IMAGE_SIZE =128
+
+image.shape
+
+IMG_SHAPE = (IMAGE_SIZE, IMAGE_SIZE, 3)
+
+base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+                                               include_top=False,
+                                               weights='imagenet')
+
+images_ds
