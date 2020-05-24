@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+#hyperparameters
 
 IMG_SIZE = 160
 NB_CHANNELS = 3
