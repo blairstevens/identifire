@@ -9,7 +9,8 @@ import tensorflow_hub as hub
 
 print("TF version:", tf.__version__)
 print("Hub version:", hub.__version__)
-print("GPU is", "available" if tf.test.is_gpu_available() else "NOT AVAILABLE")
+print("GPU is", "available" if tf.config.list_physical_devices('GPU') else "NOT AVAILABLE")
+
 module_selection = ("mobilenet_v2_100_224", 224)
 handle_base, pixels = module_selection
 MODULE_HANDLE ="https://tfhub.dev/google/imagenet/{}/feature_vector/4".format(handle_base)
@@ -18,10 +19,7 @@ print("Using {} with input size {}".format(MODULE_HANDLE, IMAGE_SIZE))
 
 BATCH_SIZE = 32
 
-data_dir = tf.keras.utils.get_file(
-    'flower_photos',
-    'https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz',
-    untar=True)
+data_dir = 'set_data/'
 
 datagen_kwargs = dict(rescale=1./255, validation_split=.20)
 dataflow_kwargs = dict(target_size=IMAGE_SIZE, batch_size=BATCH_SIZE,
@@ -32,7 +30,7 @@ valid_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 valid_generator = valid_datagen.flow_from_directory(
     data_dir, subset="validation", shuffle=False, **dataflow_kwargs)
 
-do_data_augmentation = False
+do_data_augmentation = True
 if do_data_augmentation:
     train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
       rotation_range=40,
@@ -82,7 +80,5 @@ plt.xlabel("Training Steps")
 plt.ylim([0,1])
 plt.plot(hist["accuracy"])
 plt.plot(hist["val_accuracy"])
-
-
-
-    
+saved_model_path = "./saved_model/saved_hub_model_1"
+tf.saved_model.save(model, saved_model_path)
